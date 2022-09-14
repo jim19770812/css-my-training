@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" media="screen and (max-width:3540px)" href="css/invite.css">
+    <!-- {% include ../common/vue-axios.html %} -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.js"></script>
+    <title>邀请</title>
+</head>
+<body>
+    <div id="appInvite">
+        <div class="container">
+            <div class="banner">
+                <span class="banner-img"></span>
+                <span class="banner-text">
+                    张三丰邀请您加入
+                </span>
+            </div>
+            <div class="content">
+                <div class="organization-title">
+                    滴滴责任有限公司
+                </div>
+                <div class="form-item-layout">
+                    <input class="inputs" type="text" placeholder="请输入真实姓名">
+                </div>
+                
+                <div class="form-item-layout">
+                    <span class="inputs phone-contury">+86 &gt;</span>
+                    <input id="phone" class="inputs" type="text" placeholder="手机号码" v-model="info.phone" @input="inputPhoneNum">
+                </div>
+                
+                <div class="form-item-layout">
+                    <input class="inputs" type="text" placeholder="短信验证码" v-model="info.code">
+                    <a class="verify-code-acquire" href="#" @click.stop.prevent="acquireCode">获取验证码</a>
+                </div>
+                <div class="form-item-layout">
+                    <button :class="{'submit-button-disable':!submitEnable, 'submit-button-enable':submitEnable}" :disabled="!submitEnable" @click="submit">提交申请</button>
+                </div>
+            </div>
+        </div>
+        <div v-if="popVisible" class="pop-message">
+            已提交申请
+        </div>
+    </div>
+    <script>
+        let app=new Vue({
+            el:"#appInvite",
+            delimiters: ['{[', ']}'],
+            data:{
+                popVisible:true,
+                info:{
+                    phone:"",
+                    code:"",
+                },
+                submitEnable:false,
+            },
+            methods:{
+                submit:function(){
+                    window.alert("111")
+                },
+                acquireCode:function(){
+                    if (this.info.code=""){
+                        document.getElementById("#phone").focus()
+                        console.log("phone 获得焦点")
+                    }else{
+                        axios.get("/user/")
+                    }
+
+                },
+                inputPhoneNum:function(){
+                    let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+                    this.submitEnable= this.info.phone!=''  && phoneReg.test(this.info.phone)
+                    console.log("inputPhoneNum")
+                },
+            }
+        })
+    </script>
+</body>
+</html>
